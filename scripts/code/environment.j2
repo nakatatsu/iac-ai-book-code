@@ -1,0 +1,114 @@
+# Terraformコード生成
+
+TerraformコードをHCL形式で生成してください。そのためにステップバイステップで下記のタスクを実施してください。
+
+1. コードを生成する
+2. 終了条件を満たしているかチェックする
+3. 終了条件を満たさない箇所があれば修正し、2に戻る。終了条件を満たしているなら終了する。
+
+## 前提条件 
+
+下記のプロジェクト情報に基いてください。またコーディングガイドラインに準拠してください。
+その上で、各モジュールのコードを元にモジュールを呼び出すコードを生成してください。
+
+### プロジェクト情報
+
+~~~
+{{ project_information }}
+~~~
+
+### コーディングガイドライン
+
+~~~
+{{ coding_guideline }}
+~~~
+
+### 各モジュール
+
+{% for module, codes in module_codes.items() %}
+
+#### {{ module }}モジュールのvariables.tf
+
+```
+{{ codes.variables }}
+```
+
+#### {{ module }}モジュールのoutputs.tf
+
+```
+{{ codes.outputs }}
+```
+
+{% endfor %}
+
+## 制約条件 
+
+- モジュールを呼び出すためのコードのみ生成してください。
+- リソースブロックを利用しないでください。
+
+## 終了条件 
+
+以下の条件をすべて満たすコードが生成された場合に終了と見なします。
+
+1. **モジュールの網羅性**: 指定されたモジュールがすべて利用されている
+2. **コードの整合性**: コーディングガイドラインに完全に準拠している。
+3. **出力形式の遵守**: 指定されたテンプレートに従っている。
+
+## 出力形式 
+
+### テンプレート
+
+必ず以下のテンプレートに基づいて生成してください。説明その他の情報を含めないでください。
+
+~~~
+## main.tf
+```hcl
+[Terraformコードを記述]
+```
+
+## variables.tf
+```hcl
+[Terraformコードを記述]
+```
+~~~
+
+### 出力例
+
+~~~
+## main.tf
+```hcl
+module "networking" {
+  source = "../modules/networking"
+
+  region         = var.region
+  project        = var.project
+  environment    = var.environment
+  vpc_cidr_block = var.vpc_cidr_block
+}
+
+```
+
+## variables.tf
+```hcl
+variable "region" {
+  description = "The AWS region to deploy the resources in"
+  type        = string
+}
+
+variable "project" {
+  description = "The name of the project"
+  type        = string
+}
+
+variable "environment" {
+  description = "The environment for resource deployment"
+  type        = string
+}
+
+variable "vpc_cidr_block" {
+  description = "The CIDR block for the VPC"
+  type        = string
+}
+
+```
+~~~

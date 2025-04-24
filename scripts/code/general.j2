@@ -1,0 +1,102 @@
+# Terraformコード生成
+
+TerraformコードをHCL形式で生成してください。そのためにステップバイステップで下記のタスクを実施してください。
+
+1. コードを生成する
+2. 終了条件を満たしているかチェックする
+3. 終了条件を満たさない箇所があれば修正し、2に戻る。終了条件を満たしているなら終了する。
+
+## 前提条件 
+
+下記のモジュール仕様書とプロジェクト情報に基いてください。またコーディングガイドラインに準拠してください。
+
+### モジュール仕様書
+
+~~~
+{{ specification }}
+~~~
+
+### プロジェクト情報
+
+~~~
+{{ project_information }}
+~~~
+
+### コーディングガイドライン
+
+~~~
+{{ coding_guideline }}
+~~~
+
+
+## 制約条件 
+
+- モジュール仕様書に定義されたリソースはすべて `resource` ブロックを用いて直接記述してください。
+- 外部モジュールを呼び出してはいけません。
+- 定義されたリソースは漏らさず記述し、省略しないでください。
+- モジュール仕様書に定義されていないリソースは、定義されたリソースに必要な場合に限り、追加できます。
+
+## 終了条件 
+
+以下の条件をすべて満たすコードが生成された場合に終了と見なします。
+
+1. **リソースの網羅性**: 必須リソースがすべて含まれている。
+2. **要件の準拠性**: モジュール仕様書に定義された要件と齟齬がない。
+3. **コードの整合性**: コーディングガイドラインに完全に準拠している。
+4. **出力形式の遵守**: 指定されたテンプレートに従っている。
+
+## 出力形式 
+
+### テンプレート
+
+必ず以下のテンプレートに基づいて生成してください。説明その他の情報を含めないでください。
+
+~~~
+## main.tf
+```hcl
+[Terraformコードを記述]
+```
+
+## variables.tf
+```hcl
+[Terraformコードを記述]
+```
+
+## outputs.tf
+```hcl
+[Terraformコードを記述]
+```
+~~~
+
+### 出力例
+
+~~~
+## main.tf
+```hcl
+resource "aws_instance" "main" {
+  ami           = "ami-12345678"
+  instance_type = var.instance_type
+}
+```
+
+## variables.tf
+```hcl
+variable "ami" {
+  description = "AMI ID for the EC2 instance"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "Instance type for the EC2 instance"
+  type        = string
+}
+```
+
+## outputs.tf
+```hcl
+output "instance_id" {
+  description = "ID of the created EC2 instance"
+  value       = aws_instance.example.id
+}
+```
+~~~

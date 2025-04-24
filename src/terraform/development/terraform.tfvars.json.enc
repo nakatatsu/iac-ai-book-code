@@ -1,0 +1,32 @@
+{
+	"region": "ap-northeast-1",
+	"project": "practitioner",
+	"environment": "development",
+	"vpc_cidr_block": "10.2.0.0/16",
+	"domain_name": "development.example.com",
+	"minimum_task_count": 1,
+	"db_username": "dev_admin",
+	"db_password": "ENC[AES256_GCM,data:bBbiGpaCSp3mGpKd,iv:66ZZIXO8olGzNswTxVXSozWI4O1mvW7rAgQyc5QHsQM=,tag:k8xGQpQ/NqmOWJvrCIfKkA==,type:str]",
+	"notification_email": "info@example.com",
+	"elb_aws_account_for_s3": "1234567890",
+	"default_db_name": "development_practitioner",
+	"sops": {
+		"kms": [
+			{
+				"arn": "arn:aws:kms:ap-northeast-1:012123456789s:key/3f19d006-6c05-4fbf-93fd-b7604c928ad8",
+				"created_at": "2025-02-07T10:23:14Z",
+				"enc": "AQICAHj2EmA9pwraipLGP7xt4neiHCKD4CU5d8pefkUTBsZhoQGGLQyhNR7/pmAO3FWE6HfQAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMof3Ew8rojOIj0Dx8AgEQgDvJhKL30Ud+mSpJKB1rYTPOKvitBMIt8DDg+uBlmmp4tWSfO94wTHqZdZ7rucsMFSKdHZzl70ILXzkgdw==",
+				"aws_profile": ""
+			}
+		],
+		"gcp_kms": null,
+		"azure_kv": null,
+		"hc_vault": null,
+		"age": null,
+		"lastmodified": "2025-02-07T10:23:14Z",
+		"mac": "ENC[AES256_GCM,data:tiD7enwA9L321m9vUpteHH1Ds1Nzwp2aDNwYse+EfFEoT2T/Zyl/MqPzhnrAE7VRtBlQ7RCIbt6J/PDrrjEc6GUMLNn3JrSgeZhe4RnNb5usjpk2BFwGqunAGhPDHkPuRGNQQLQ+HnmtvZm926NO4UHuMn0LCbHVSIk/f/Frnss=,iv:SHsdYhPyFEej4bx3+EVUBEQs2O14jGuepX0dvP6+bsc=,tag:ByMRyRiF1EsYEskPQixIZw==,type:str]",
+		"pgp": null,
+		"encrypted_regex": "^(.*_password|.*_secret)$",
+		"version": "3.9.0"
+	}
+}

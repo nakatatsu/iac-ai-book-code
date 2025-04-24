@@ -1,0 +1,129 @@
+# AWS セキュリティグループ Terraformコード生成
+
+セキュリティグループとそのルールを定義するTerraformコードを生成してください。
+
+
+## 前提条件 
+
+下記のモジュール仕様書とプロジェクト情報に基いてください。またコーディングガイドラインに準拠してください。
+
+### モジュール仕様書
+
+~~~
+{{ specification }}
+~~~
+
+### プロジェクト情報
+
+~~~
+{{ project_information }}
+~~~
+
+### コーディングガイドライン
+
+~~~
+{{ coding_guideline }}
+~~~
+
+## 制約条件 
+
+- セキュリティグループとそのルールのみを記述します。それ以外のリソースを追加してはいけません。
+- モジュール仕様書に定義されたリソースはすべて `resource` ブロックを用いて直接記述してください。
+- 外部モジュールを呼び出してはいけません。
+- リソース名と`output`の識別子には、モジュール名`{{identifier}}`を名前または接頭辞として必ず使用してください（例: `resource "aws_iam_policy" "api"`, `resource "aws_iam_role" "api_backup"`, `output "api_role_arn"`）。
+- IAMロールはすべて`output`ブロックで出力してください。
+
+
+## 制約条件
+
+- セキュリティグループとルールは別々のリソースとして定義してください。すなわち、セキュリティグループのルールは必ず `aws_security_group_rule` を使用してください。
+- セキュリティグループのIDをすべて `output` ブロックで出力してください。
+- セキュリティグループの名前は、`[環境名]-[プロジェクト名]-[追加情報]` の形式で命名してください。
+  - (e.g., `${var.environment}-${var.project}-api`, `${var.environment}-${var.project}-api-db`)
+- セキュリティグループで用いるVPCのIDは `variable` の `vpc_id` から取得してください。
+  - 例: `vpc_id = var.vpc_id`
+- セキュリティグループとルールには必ず `description` を設定してください。
+- セキュリティグループとルール以外のリソースを追加してはいけません。
+- リソース名と `output` の識別子にはモジュール名 `{{identifier}}` を接頭辞または名前として利用してください。(e.g., `resource "aws_security_group" "{{identifier}}"`、`output "{{identifier}}_security_group_id"`)
+
+## 終了条件 
+
+以下の条件をすべて満たすコードが生成された場合に終了と見なします。
+
+1. **リソースの網羅性**: 必須リソースがすべて含まれている。
+2. **要件の準拠性**: モジュール仕様書に定義された要件と齟齬がない。
+3. **コードの整合性**: コーディングガイドラインに完全に準拠している。
+4. **出力形式の遵守**: 指定されたテンプレートに従っている。
+
+## 出力形式
+
+### テンプレート
+
+必ず以下のテンプレートに基づいて生成してください。説明その他の情報を含めないでください。
+
+~~~
+## main.tf
+```hcl
+[Terraformコードを記述]
+```
+
+## variables.tf
+```hcl
+[Terraformコードを記述]
+```
+
+## outputs.tf
+```hcl
+[Terraformコードを記述]
+```
+~~~
+
+### 出力例
+
+~~~
+## main.tf
+```hcl
+resource "aws_security_group" "api" {
+  name        = "${var.environment}-${var.project}-api"
+  description = "Security group for API"
+  vpc_id      = var.vpc_id
+}
+
+resource "aws_security_group_rule" "api_ingress_allow_http" {
+  type        = "ingress"
+  from_port   = 443
+  to_port     = 443
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.api.id
+  description = "Allow HTTPS traffic"
+}
+```
+
+## variables.tf
+```hcl
+variable "environment" {
+  description = "Deployment environment (e.g., dev, prod)"
+  type        = string
+}
+
+variable "project" {
+  description = "Project name"
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "ID of the VPC"
+  type        = string
+}
+```
+
+## outputs.tf
+```hcl
+output "api_security_group_id" {
+  description = "ID of the API security group"
+  value       = aws_security_group.api.id
+}
+```
+~~~
+

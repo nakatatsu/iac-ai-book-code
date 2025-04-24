@@ -1,0 +1,32 @@
+quiet: true
+
+skip-check:
+  - CKV2_AWS_11   # Ensure VPC flow logging is enabled in all VPCs
+  - CKV2_AWS_12   # Ensure the default security group of every VPC restricts all traffic
+  - CKV2_AWS_28   # Ensure public facing ALB are protected by WAF
+  - CKV2_AWS_47   # Ensure AWS CloudFront attached WAFv2 WebACL is configured with AMR for Log4j Vulnerability
+  - CKV2_AWS_62   # Ensure S3 buckets should have event notifications enabled
+  - CKV_AWS_136   # Ensure that ECR repositories are encrypted using KMS
+  - CKV_AWS_144   # Ensure that S3 bucket has cross-region replication enabled
+  - CKV_AWS_145   # Ensure that S3 buckets are encrypted with KMS by default
+  - CKV_AWS_158   # Ensure that CloudWatch Log Group is encrypted by KMS.
+  - CKV_AWS_162   # Ensure RDS cluster has IAM authentication enabled
+  - CKV_AWS_192   # Ensure WAF prevents message lookup in Log4j2. See CVE-2021-44228 aka log4jshell
+  - CKV_AWS_240   # Ensure Kinesis Firehose delivery stream is encrypted
+  - CKV_AWS_241   # Ensure that Kinesis Firehose Delivery Streams are encrypted with CMK
+  - CKV_AWS_324   # Ensure that RDS Cluster log capture is enabled
+  - CKV_AWS_327   # Ensure RDS Clusters are encrypted using KMS CMKs
+  - CKV_AWS_354   # Ensure RDS Performance Insights are encrypted using KMS CMKs
+  - CKV_AWS_310   # Ensure CloudFront distributions should have origin failover configured
+  - CKV2_AWS_32   # Ensure CloudFront distribution has a response headers policy attached
+  - CKV2_AWS_46   # Ensure AWS CloudFront Distribution with S3 have Origin Access set to enabled
+  - CKV2_AWS_27   # Ensure Postgres RDS as aws_rds_cluster has Query Logging enabled
+  - CKV2_AWS_31   # Ensure WAF2 has a Logging Configuration
+  - CKV_AWS_309   # Ensure CloudFront distributions have access logging enabled
+  - CKV_AWS_166   # Ensure Backup Vault is encrypted at rest using KMS CMK
+  - CKV2_AWS_5    # Ensure that Security Groups are attached to another resource
+  - CKV_AWS_337   # Ensure SSM parameters are using KMS CMK
+  - CKV_AWS_18    # Ensure the S3 bucket has access logging enabled
+  - CKV_AWS_26    # Ensure all data stored in the SNS topic is encrypted
+  - CKV_AWS_226   # Ensure DB instance gets all minor upgrades automatically
+  - CKV_AWS_260   # Ensure no security groups allow ingress from 0.0.0.0:0 to port 80

@@ -1,0 +1,133 @@
+# Terraformコードの検証と修正
+
+モジュール仕様書と既存のTerraformコードを比較し、仕様書の要件を満たしていない箇所がある場合は修正したコードを生成してください。
+
+- **コードで実装されていない場合**：コードを追加してください。
+- **コードが仕様書の内容と異なる場合**：元のコードを修正してください。
+- **必要ないコードがある場合**： 元のコードから除いてください。
+
+## 前提条件
+
+### モジュール仕様書
+
+~~~
+{{ specification }}
+~~~
+
+### プロジェクト情報
+
+~~~
+{{ project_information }}
+~~~
+
+### コーディングガイドライン
+
+~~~
+{{ coding_guideline }}
+~~~
+
+### コード
+
+#### main
+
+```
+{{ code }}
+```
+
+#### variables
+
+```
+{{ variable_code }}
+```
+
+#### outputs
+
+```
+{{ output_code }}
+```
+
+## 制約条件
+
+- 不足や修正が必要な場合：修正された完全なTerraformコードを省略せず出力してください。
+
+## 終了条件
+
+以下を満たす場合に終了と見なします：
+1. コードが仕様書の内容に準拠している。
+2. 新たに生成したコードがコーディングガイドラインに準拠している。
+
+## 出力形式
+
+### テンプレート
+
+#### 不足や修正が必要な場合
+- 修正された完全なTerraformコードを省略せずに出力してください。
+
+#### 問題がない場合
+- 以下のように1行で出力してください：
+  ```
+  Nothing
+  ```
+
+### コードのテンプレート
+- 以下の形式でコードを出力してください。
+
+~~~
+
+## main.tf
+```hcl
+[修正後のTerraformコード]
+```
+
+## variables.tf
+```hcl
+[修正後のTerraformコード]
+```
+
+## outputs.tf
+```hcl
+[修正後のTerraformコード]
+```
+~~~
+
+
+## 出力例
+
+#### 修正が必要な場合
+~~~
+
+## main.tf
+```hcl
+resource "aws_instance" "example" {
+  ami           = "ami-12345678"
+  instance_type = "t2.micro"
+}
+```
+
+## variables.tf
+```hcl
+variable "ami" {
+  description = "AMI ID for the EC2 instance"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "Instance type for the EC2 instance"
+  type        = string
+}
+```
+
+## outputs.tf
+```hcl
+output "instance_id" {
+  description = "ID of the created EC2 instance"
+  value       = aws_instance.example.id
+}
+```
+~~~
+
+#### 問題がない場合
+```
+Nothing
+```
+

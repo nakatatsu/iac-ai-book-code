@@ -1,0 +1,138 @@
+# AWS IAM Terraformコード生成
+
+IAMロールとIAMポリシーを定義するTerraformコードを生成してください。
+
+## 前提条件 
+
+下記のモジュール仕様書とプロジェクト情報に基いてください。またコーディングガイドラインに準拠してください。
+
+### モジュール仕様書
+
+~~~
+{{ specification }}
+~~~
+
+### プロジェクト情報
+
+~~~
+{{ project_information }}
+~~~
+
+### コーディングガイドライン
+
+~~~
+{{ coding_guideline }}
+~~~
+
+## 制約条件 
+
+- IAMロールとIAMポリシーのみを記述します。それ以外のリソースを追加してはいけません。
+- モジュール仕様書に定義されたリソースはすべて `resource` ブロックを用いて直接記述してください。
+- 外部モジュールを呼び出してはいけません。
+- リソース名と`output`の識別子には、モジュール名`{{identifier}}`を名前または接頭辞として必ず使用してください（例: `resource "aws_iam_policy" "api"`, `resource "aws_iam_role" "api_backup"`, `output "api_role_arn"`）。
+- IAMロールはすべて`output`ブロックで出力してください。
+
+## 終了条件 
+
+以下の条件をすべて満たすコードが生成された場合に終了と見なします。
+
+1. **リソースの網羅性**: 必須リソースがすべて含まれている。
+2. **要件の準拠性**: モジュール仕様書に定義された要件と齟齬がない。
+3. **コードの整合性**: コーディングガイドラインに完全に準拠している。
+4. **出力形式の遵守**: 指定されたテンプレートに従っている。
+
+
+## 出力形式 
+
+### テンプレート
+
+必ず以下のテンプレートに基づいて生成してください。説明その他の情報を含めないでください。
+
+~~~
+## main.tf
+```hcl
+[Terraformコードを記述]
+```
+
+## variables.tf
+```hcl
+[Terraformコードを記述]
+```
+
+## outputs.tf
+```hcl
+[Terraformコードを記述]
+```
+~~~
+
+### 出力例
+
+~~~
+## main.tf
+```hcl
+
+resource "aws_iam_policy" "api" {
+  name        = "${var.environment}-${var.project}-api-policy"
+  description = "IAM policy for API to access CloudWatch Logs and SSM Parameter Store"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "arn:aws:logs:*:*:log-group:/aws/ecs/${var.environment}-${var.project}-api:*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "ssm:GetParameter"
+        Resource = "arn:aws:ssm:*:*:parameter/${var.environment}/${var.project}/api/*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role" "api" {
+  name = "${var.environment}-${var.project}-api"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "api" {
+  role       = aws_iam_role.api.name
+  policy_arn = aws_iam_policy.api.arn
+}
+
+```
+
+## variables.tf
+```hcl
+variable "environment" {
+  description = "The environment in which the resources will be created"
+}
+
+variable "project" {
+  description = "The name of the project"
+}
+```
+
+## outputs.tf
+```hcl
+output "api_role_arn" {
+  description = "ARN of the ECS Task role for API"
+  value       = aws_iam_role.api.arn
+}
+```
+~~~

@@ -1,0 +1,67 @@
+# セキュリティグループ モジュール仕様書({{identifier}}分) 作成
+
+セキュリティグループを定義するモジュール仕様書({{identifier}}分)を作成してください。
+
+## 前提条件 
+
+### モジュール要件
+~~~
+{{requirements}}
+~~~
+
+### インフラ設計ポリシー
+~~~
+{{infrastructure_design_policy}}
+~~~
+
+### メインのモジュール仕様書
+~~~
+{{main_specifications}}
+~~~
+
+## 制約条件
+
+- 意味のない記述（例: "適切に設定する"）を避け、具体的な名前と値を記述してください。
+- 指定された出力形式に準拠してください。
+
+## 終了条件
+
+1. **要件の網羅性**: モジュール要件とメインのモジュール仕様書に基づき、必要なIAMロールとポリシーがすべて記載されている。
+2. **ポリシー準拠性**: インフラ設計ポリシーに完全に準拠している。
+3. **フォーマットの遵守**: 指定されたフォーマットに基づいて記載されている。
+
+## 出力形式
+
+### テンプレート
+
+```
+# {{identifier}} Security Group Specification
+
+- **[Name]**
+  - **説明**: [Describe the purpose in English]
+  - **インバウンドルール**:
+    - [Protocol] (Port [port_number]): Allow from [Source]
+  - **アウトバウンドルール**:
+    - [Protocol] (Port [port_number]): Allow to [Destination]
+```
+
+### 出力例
+
+```
+# {{identifier}} セキュリティグループ仕様書
+
+- **ALB**
+  - **説明**: To allow the ALB to accept HTTPS requests from the Internet.
+  - **インバウンドルール**:
+    - HTTPS (Port 443): Allow from 0.0.0.0/0
+  - **アウトバウンドルール**:
+    - HTTP (Port 80): Allow to API security group
+
+- **API**
+  - **説明**: To allow the API to accept HTTP requests from the ALB and access repositories of libraries.
+  - **インバウンドルール**:
+    - HTTP (Port 80): Allow from the ALB security group
+  - **アウトバウンドルール**:
+    - HTTPS (Port 443): Allow to 0.0.0.0/0
+    - HTTP (Port 80): Allow to 0.0.0.0/0
+```
